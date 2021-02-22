@@ -13,6 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -36,6 +37,11 @@ public class APIController {
 		apiserivce.InsertAPI_User(api_user);
 		System.out.println("가입된 user : " + api_user);
 		return "API_User_Result";
+	}
+	@RequestMapping("/Api")
+	public String api_join() {
+		return "API_User";
+		
 	}
 	
 	@SuppressWarnings("unused")

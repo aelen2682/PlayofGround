@@ -147,15 +147,6 @@
 	top: 92%;
 	margin-left: 10px;
 }
-
-.chat {
-	display: flex;
-	place-content: center;
-	color: green;
-	font-size: x-large;
-	padding: 10px;
-}
-
 .navbar-brand img {
 	width: 35px;
 	height: 35px;
@@ -179,22 +170,6 @@
 .carousel-inner {
 	border-radius: 1.25rem;
 }
-
-.rightnav_1 {
-	position: fixed;
-	background-color: inherit;
-	width: 100px;
-	height: 100px;
-	left: 90%;
-	top: 83%;
-}
-
-.rightnav_2 {
-	font-size: 40px;
-	width: 50%;
-	height: 100%;
-}
-
 .modal_wrap {
 	display: none;
 	width: 314px;
@@ -261,7 +236,7 @@ th {
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a class="nav-link" href="#">홈
+					<li class="nav-item active"><a class="nav-link" href="http://localhost:8090/soccer/list">홈
 							<span class="sr-only">(current)</span>
 					</a></li>
 					<li class="nav-item"><a class="nav-link"
@@ -346,17 +321,6 @@ th {
 						} catch (NullPointerException e) {
 						}
 					%>
-				</div>
-				<div class="chat">
-					<i class="fas fa-quote-left" /></i>실시간 채팅<i class="fas fa-quote-right"></i>
-				</div>
-				<div id="messageWindow2"
-					style="padding: 10px 0; height: 25em; overflow: auto; background-color: #a0c0d7;">
-					<div id="button">
-						<input id="inputMessage" type="text"
-							onkeydown="if(event.keyCode==13){send();}" /> <input
-							type="submit" value="send" onclick="send();" />
-					</div>
 				</div>
 			</div>
 			<!-- /.col-lg-3 -->
@@ -515,19 +479,6 @@ th {
 		<!-- /.col-lg-9 -->
 		<!-- /.row -->
 		<!-- /.container -->
-		<div class="rightnav">
-			<div class="rightnav_1">
-				<table class="rightnav_2">
-					<tr>
-						<td><a href="#id01"><i class="far fa-arrow-alt-circle-up"></i></a></td>
-					</tr>
-					<tr>
-						<td><a href="#id02"><i
-								class="far fa-arrow-alt-circle-down"></i></a></td>
-					</tr>
-				</table>
-			</div>
-		</div>
 	</div>
 	</div>
 	<!-- Footer -->
@@ -544,148 +495,5 @@ th {
 		src="../startbootstrap-shop-homepage-gh-pages/vendor/jquery/jquery.min.js"></script>
 	<script
 		src="../startbootstrap-shop-homepage-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script type="text/javascript">
-	
-	//웹소켓 설정
-	var webSocket = new WebSocket('ws://localhost:8090/broadcasting');
-	
-	var inputMessage = document.getElementById('inputMessage');
-	//같은 이가 여러번 보낼때 이름 판별할 변수
-	var re_send = <%=userId%>;
-
-	webSocket.onerror = function(event) {
-		onError(event)
-	};
-	webSocket.onopen = function(event) {
-		onOpen(event)
-	};
-	webSocket.onmessage = function(event) {
-		onMessage(event)
-	};
-
-	//	OnClose는 웹 소켓이 끊겼을 때 동작하는 함수.
-	function onClose(event){
-		var div=document.createElement('div');
-		
-		//접속했을 때 접속자들에게 알릴 내용.
-		webSocket.send("<%=userId%> is DisConnected\n");
-	}
-
-	//	OnMessage는 클라이언트에서 서버 측으로 메시지를 보내면 호출되는 함수.
-	function onMessage(event) {
-
-		//클라이언트에서 날아온 메시지를 |\| 단위로 분리한다
-		var message = event.data.split("|\|");
-		
-			//금방 보낸 이를 re_send에 저장하고,
-			//금방 보낸 이가 다시 보낼경우 보낸이 출력 없도록 함.
-			if(message[0] != re_send){
-				//messageWindow2에 붙이기
-				var who = document.createElement('div');
-
-				who.style["padding"]="3px";
-				who.style["margin-left"]="3px";
-
-				who.innerHTML = message[0];
-				document.getElementById('messageWindow2').appendChild(who);
-
-				re_send = message[0];
-			}
-		
-			//div는 받은 메시지 출력할 공간.
-			var div=document.createElement('div');
-		
-			div.style["width"]="auto";
-			div.style["word-wrap"]="break-word";
-			div.style["display"]="inline-block";
-			div.style["background-color"]="#fcfcfc";
-			div.style["border-radius"]="3px";
-			div.style["padding"]="3px";
-			div.style["margin-left"]="3px";
-
-			div.innerHTML = message[1];
-			document.getElementById('messageWindow2').appendChild(div);
-		
-		//clear div 추가. 줄바꿈용.		
-		var clear=document.createElement('div');
-		clear.style["clear"]="both";
-		document.getElementById('messageWindow2').appendChild(clear);
-		
-		//div 스크롤 아래로.
-		messageWindow2.scrollTop = messageWindow2.scrollHeight;
-		
-	}
-
-	//	OnOpen은 서버 측에서 클라이언트와 웹 소켓 연결이 되었을 때 호출되는 함수.
-	function onOpen(event) {
-		
-		//접속했을 때, 내 영역에 보이는 글.
-		var div=document.createElement('div');
-		
-		div.style["text-align"]="center";
-		
-		div.innerHTML = "반갑습니다.";
-		document.getElementById('messageWindow2').appendChild(div);
-		
-		var clear=document.createElement('div');
-		clear.style["clear"]="both";
-		document.getElementById('messageWindow2').appendChild(clear);
-		
-		//접속했을 때 접속자들에게 알릴 내용.
-		webSocket.send("<%=userId%>|\|안녕하세요^^");
-	}
-
-	//	OnError는 웹 소켓이 에러가 나면 발생을 하는 함수.
-	function onError(event) {
-		alert("chat_server connecting error " + event.data);
-	}
-	
-	// send 함수를 통해서 웹소켓으로 메시지를 보낸다.
-	function send() {
-
-		//inputMessage가 있을때만 전송가능
-		if(inputMessage.value!=""){
-			
-			//	서버에 보낼때 날아가는 값.
-			webSocket.send("<%=userId%>
-		|\|" + inputMessage.value);
-
-				// 채팅화면 div에 붙일 내용
-				var div = document.createElement('div');
-
-				div.style["width"] = "auto";
-				div.style["word-wrap"] = "break-word";
-				div.style["float"] = "right";
-				div.style["display"] = "inline-block";
-				div.style["background-color"] = "#ffea00";
-				div.style["padding"] = "3px";
-				div.style["border-radius"] = "3px";
-				div.style["margin-right"] = "3px";
-
-				//div에 innerHTML로 문자 넣기
-				div.innerHTML = inputMessage.value;
-				document.getElementById('messageWindow2').appendChild(div);
-
-				//clear div 추가
-				var clear = document.createElement('div');
-				clear.style["clear"] = "both";
-				document.getElementById('messageWindow2').appendChild(clear);
-
-				//	?
-				//inputMessage.value = "";
-
-				//	inputMessage의 value값을 지운다.
-				inputMessage.value = '';
-
-				//	textarea의 스크롤을 맨 밑으로 내린다.
-				messageWindow2.scrollTop = messageWindow2.scrollHeight;
-
-				//	금방 보낸 사람을 임시 저장한다.
-				re_send = "
-	<%=userId%>";
-		}//inputMessage가 있을때만 전송가능 끝.
-		
-	}
-</script>
 </body>
 </html>

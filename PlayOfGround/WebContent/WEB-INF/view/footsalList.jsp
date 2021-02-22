@@ -138,7 +138,7 @@
 
 #button{
 	position: sticky;
-    top: 92%;
+    top: 84%;
     margin-left: 10px;
 }
 .chat{
@@ -189,14 +189,15 @@
 
 .modal_wrap {
 	display: none;
-	width: 314px;
-	height: 195px;
-	position: absolute;
-	top: 36%;
-	left: 94%;
-	margin: -250px 0 0 -250px;
-	background: #eee;
-	z-index: 2;
+    width: 303px;
+    height: 184px;
+    position: absolute;
+    top: 52%;
+    left: 90%;
+    margin: -250px 0 0 -250px;
+    background: #eee;
+    z-index: 2;
+    border-radius: 15px;
 }
 
 .black_bg {
@@ -246,7 +247,7 @@ th {
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a class="nav-link" href="#">홈
+					<li class="nav-item active"><a class="nav-link" href="http://localhost:8090/soccer/list">홈
 							<span class="sr-only">(current)</span>
 					</a></li>
 					<li class="nav-item"><a class="nav-link" href="http://localhost:8090/board/list">매칭게시판</a></li>
@@ -332,12 +333,12 @@ th {
 				 	<div class="chat">
             			<i class="fas fa-quote-left"/></i>실시간 채팅<i class="fas fa-quote-right"></i>
           			</div>
-					<div id="messageWindow2" style="padding:10px 0;height: 25em; overflow: auto; background-color: #a0c0d7;">
+					<div id="messageWindow2" style="padding:10px 0;height: 21em; overflow: auto; background-color: #a0c0d7;border-radius: 7px;"></div>
 						<div id="button">
 						<input id="inputMessage" type="text"onkeydown="if(event.keyCode==13){send();}" />
 						<input type="submit" value="send" onclick="send();" />
-					</div>
-				</div>	 
+					
+				</div>	  
 			</div>
 			<!-- /.col-lg-3 -->
 
@@ -407,10 +408,7 @@ th {
 							<td><a href="#id01"><i
 									class="far fa-arrow-alt-circle-up"></i></a></td>
 						</tr>
-						<tr>
-							<td><a href="#id02"><i
-									class="far fa-arrow-alt-circle-down"></i></a></td>
-						</tr>
+						
 					</table>
 				</div>
 			</div>
@@ -508,7 +506,7 @@ th {
 		
 		div.style["text-align"]="center";
 		
-		div.innerHTML = "반갑습니다.";
+		div.innerHTML = "<%=userId%>"+" 입장하였습니다";
 		document.getElementById('messageWindow2').appendChild(div);
 		
 		var clear=document.createElement('div');

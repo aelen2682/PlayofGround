@@ -46,6 +46,8 @@
 	integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp"
 	crossorigin="anonymous">
 </head>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
 
@@ -338,7 +340,7 @@ th {
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a class="nav-link" href="#">홈
+					<li class="nav-item active"><a class="nav-link" href="http://localhost:8090/soccer/list">홈
 							<span class="sr-only">(current)</span>
 					</a></li>
 					<li class="nav-item"><a class="nav-link" href="http://localhost:8090/board/list">매칭게시판</a></li>
@@ -421,15 +423,7 @@ th {
 						}
 					%> 
 				</div>
-				 	<div class="chat">
-            			<i class="fas fa-quote-left"/></i>실시간 채팅<i class="fas fa-quote-right"></i>
-          			</div>
-					<div id="messageWindow2" style="padding:10px 0;height: 25em; overflow: auto; background-color: #a0c0d7;">
-						<div id="button">
-						<input id="inputMessage" type="text"onkeydown="if(event.keyCode==13){send();}" />
-						<input type="submit" value="send" onclick="send();" />
-					</div>
-				</div>	 
+				 
 			</div>
 			<!-- /.col-lg-3 -->
 <%

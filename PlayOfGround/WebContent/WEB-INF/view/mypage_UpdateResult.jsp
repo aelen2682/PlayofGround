@@ -7,10 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-<fieldset>
-	${page_User.name} ${API_User.name}님의 정보가 수정되었습니다.<br>
-	수정된 정보로 로그인 하세요.<br>
-	<a href="logout">메인으로</a>
-</fieldset>
+<script type="text/javascript">alert("수정되었습니다");
+	history.go(-1);
+</script>
 </body>
 </html>

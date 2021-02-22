@@ -10,7 +10,7 @@
 	<fieldset>
 		${page_User.name}님 환영합니다!<br> 회원가입이 완료되었습니다!<br>
 		
-		<a href="http://localhost:8090/"><button>메인으로</button></a>
+		<a href="http://localhost:8090/soccerList"><button>메인으로</button></a>
 	</fieldset>
 
 </body>

@@ -10,7 +10,8 @@
 	<%
 	session.invalidate();
 	%>
-	alert("로그아웃이 되었습니다.");
+	<script type="text/javascript">alert("로그아웃이 되었습니다.");</script>
+	
 	<%
 	response.sendRedirect("main");
 	%>

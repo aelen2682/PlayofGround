@@ -32,23 +32,23 @@
 
             <tr>
                 <td id="title">아이디</td>
-                <td>${data.id }</td>
+                <td>${data.id}</td>
             </tr>
             <tr>
                 <td id="title">작성자</td>
-                <td>${data.name }</td>
+                <td>${data.name}</td>
             </tr>
             <tr>
                 <td id="title">제목</td>
-                <td>${data.title }</td>
+                <td>${data.title}</td>
             </tr>
             <tr>
                 <td id="title">내용</td>
-                <td> ${data.context }</td>
+                <td> ${data.context}</td>
             </tr>
             <tr>
                 <td id="title">작성일</td>
-				<td>${data.iDate }</td>
+				<td>${data.iDate}</td>
             </tr>
 
             <tr align="center" valign="middle">

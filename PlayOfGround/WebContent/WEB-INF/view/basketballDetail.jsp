@@ -41,7 +41,8 @@
 <link
 	href="../startbootstrap-shop-homepage-gh-pages/vendor/bootstrap/css/bootstrap.css"
 	rel="stylesheet">
-
+<script type="text/javascript"
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=64368b5f76e7c60683cd77d95a4074a4&libraries=services"></script>
 <!-- Custom styles for this template -->
 <link
 	href="../startbootstrap-shop-homepage-gh-pages/css/shop-homepage.css"
@@ -196,14 +197,15 @@
 
 .modal_wrap {
 	display: none;
-	width: 314px;
-	height: 195px;
-	position: absolute;
-	top: 36%;
-	left: 94%;
-	margin: -250px 0 0 -250px;
-	background: #eee;
-	z-index: 2;
+    width: 303px;
+    height: 184px;
+    position: absolute;
+    top: 52%;
+    left: 90%;
+    margin: -250px 0 0 -250px;
+    background: #eee;
+    z-index: 2;
+    border-radius: 15px;
 }
 
 .black_bg {
@@ -284,7 +286,7 @@ th {
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a class="nav-link" href="#">홈
+					<li class="nav-item active"><a class="nav-link" href="http://localhost:8090/soccer/list">홈
 							<span class="sr-only">(current)</span>
 					</a></li>
 					<li class="nav-item"><a class="nav-link"
@@ -370,17 +372,7 @@ th {
 						}
 					%>
 				</div>
-				<div class="chat">
-					<i class="fas fa-quote-left" /></i>실시간 채팅<i class="fas fa-quote-right"></i>
-				</div>
-				<div id="messageWindow2"
-					style="padding: 10px 0; height: 25em; overflow: auto; background-color: #a0c0d7;">
-					<div id="button">
-						<input id="inputMessage" type="text"
-							onkeydown="if(event.keyCode==13){send();}" /> <input
-							type="submit" value="send" onclick="send();" />
-					</div>
-				</div>
+				<div id="map" style="width: 89%; height: 17%; position: absolute; top: 17%"></div>
 			</div>
 			<!-- /.col-lg-3 -->
 
@@ -653,13 +645,16 @@ th {
  - 2일 전 : 50% 환불
  - 1일 전 ~ 당일 : 환불 불가
 
-** 우천시, 폭설, 천재지변 등 날씨에 관련된 환불은 상단의 구장 환불규정에 따라 처리되며 아래와 같을 시 날짜시간변경이 가능합니다.
+** 우천시, 폭설, 천재지변 등 날씨에 관련된 환불은 상단의 구장 환불규정에 따라 처리되며 아래와 같을 시 
+날짜시간변경이 가능합니다.
 1. 이용 1시간 전 부터 이용 할때 까지 1시간 강수량이 최대 15mm 이상일 때
 2. 제설이 안되어서 구장 사용이 어려울 때
 
-** 구장 환불규정에 천재지변의 기준이 없을 경우 호우경보, 대설경보, 태풍주의보, 태풍경보의 경우만 천재지변으로 판단합니다.
+** 구장 환불규정에 천재지변의 기준이 없을 경우 호우경보, 대설경보, 태풍주의보, 태풍경보의 경우만 
+천재지변으로 판단합니다.
 
-** 기상현상으로 인한 환불 및 날짜시간변경은 예약된 이용시간 종료 전에 구장연락처로 말씀해주셔야합니다. 그 이후에는 어떠한 경우라도 상단의 구장 환불 규정대로 처리됩니다.
+** 기상현상으로 인한 환불 및 날짜시간변경은 예약된 이용시간 종료 전에 구장연락처로 말씀해주셔야합니다. 
+그 이후에는 어떠한 경우라도 상단의 구장 환불 규정대로 처리됩니다.
 
 
 
@@ -705,148 +700,29 @@ th {
 		src="../startbootstrap-shop-homepage-gh-pages/vendor/jquery/jquery.min.js"></script>
 	<script
 		src="../startbootstrap-shop-homepage-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script type="text/javascript">
-	
-	//웹소켓 설정
-	var webSocket = new WebSocket('ws://localhost:8090/broadcasting');
-	
-	var inputMessage = document.getElementById('inputMessage');
-	//같은 이가 여러번 보낼때 이름 판별할 변수
-	var re_send = <%=userId%>;
 
-	webSocket.onerror = function(event) {
-		onError(event)
-	};
-	webSocket.onopen = function(event) {
-		onOpen(event)
-	};
-	webSocket.onmessage = function(event) {
-		onMessage(event)
-	};
+<script type="text/javascript">
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+mapOption = { 
+    center: new kakao.maps.LatLng(37.56197087935768, 126.8640166441201), // 지도의 중심좌표
+    level: 7 // 지도의 확대 레벨
+};
 
-	//	OnClose는 웹 소켓이 끊겼을 때 동작하는 함수.
-	function onClose(event){
-		var div=document.createElement('div');
-		
-		//접속했을 때 접속자들에게 알릴 내용.
-		webSocket.send("<%=userId%> is DisConnected\n");
-	}
+var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
-	//	OnMessage는 클라이언트에서 서버 측으로 메시지를 보내면 호출되는 함수.
-	function onMessage(event) {
+//마커가 표시될 위치입니다 
+var markerPosition  = new kakao.maps.LatLng(37.56197087935768, 126.8640166441201); 
 
-		//클라이언트에서 날아온 메시지를 |\| 단위로 분리한다
-		var message = event.data.split("|\|");
-		
-			//금방 보낸 이를 re_send에 저장하고,
-			//금방 보낸 이가 다시 보낼경우 보낸이 출력 없도록 함.
-			if(message[0] != re_send){
-				//messageWindow2에 붙이기
-				var who = document.createElement('div');
+//마커를 생성합니다
+var marker = new kakao.maps.Marker({
+position: markerPosition
+});
 
-				who.style["padding"]="3px";
-				who.style["margin-left"]="3px";
+//마커가 지도 위에 표시되도록 설정합니다
+marker.setMap(map);
 
-				who.innerHTML = message[0];
-				document.getElementById('messageWindow2').appendChild(who);
-
-				re_send = message[0];
-			}
-		
-			//div는 받은 메시지 출력할 공간.
-			var div=document.createElement('div');
-		
-			div.style["width"]="auto";
-			div.style["word-wrap"]="break-word";
-			div.style["display"]="inline-block";
-			div.style["background-color"]="#fcfcfc";
-			div.style["border-radius"]="3px";
-			div.style["padding"]="3px";
-			div.style["margin-left"]="3px";
-
-			div.innerHTML = message[1];
-			document.getElementById('messageWindow2').appendChild(div);
-		
-		//clear div 추가. 줄바꿈용.		
-		var clear=document.createElement('div');
-		clear.style["clear"]="both";
-		document.getElementById('messageWindow2').appendChild(clear);
-		
-		//div 스크롤 아래로.
-		messageWindow2.scrollTop = messageWindow2.scrollHeight;
-		
-	}
-
-	//	OnOpen은 서버 측에서 클라이언트와 웹 소켓 연결이 되었을 때 호출되는 함수.
-	function onOpen(event) {
-		
-		//접속했을 때, 내 영역에 보이는 글.
-		var div=document.createElement('div');
-		
-		div.style["text-align"]="center";
-		
-		div.innerHTML = "반갑습니다.";
-		document.getElementById('messageWindow2').appendChild(div);
-		
-		var clear=document.createElement('div');
-		clear.style["clear"]="both";
-		document.getElementById('messageWindow2').appendChild(clear);
-		
-		//접속했을 때 접속자들에게 알릴 내용.
-		webSocket.send("<%=userId%>|\|안녕하세요^^");
-	}
-
-	//	OnError는 웹 소켓이 에러가 나면 발생을 하는 함수.
-	function onError(event) {
-		alert("chat_server connecting error " + event.data);
-	}
-	
-	// send 함수를 통해서 웹소켓으로 메시지를 보낸다.
-	function send() {
-
-		//inputMessage가 있을때만 전송가능
-		if(inputMessage.value!=""){
-			
-			//	서버에 보낼때 날아가는 값.
-			webSocket.send("<%=userId%>
-		|\|" + inputMessage.value);
-
-				// 채팅화면 div에 붙일 내용
-				var div = document.createElement('div');
-
-				div.style["width"] = "auto";
-				div.style["word-wrap"] = "break-word";
-				div.style["float"] = "right";
-				div.style["display"] = "inline-block";
-				div.style["background-color"] = "#ffea00";
-				div.style["padding"] = "3px";
-				div.style["border-radius"] = "3px";
-				div.style["margin-right"] = "3px";
-
-				//div에 innerHTML로 문자 넣기
-				div.innerHTML = inputMessage.value;
-				document.getElementById('messageWindow2').appendChild(div);
-
-				//clear div 추가
-				var clear = document.createElement('div');
-				clear.style["clear"] = "both";
-				document.getElementById('messageWindow2').appendChild(clear);
-
-				//	?
-				//inputMessage.value = "";
-
-				//	inputMessage의 value값을 지운다.
-				inputMessage.value = '';
-
-				//	textarea의 스크롤을 맨 밑으로 내린다.
-				messageWindow2.scrollTop = messageWindow2.scrollHeight;
-
-				//	금방 보낸 사람을 임시 저장한다.
-				re_send = "
-	<%=userId%>";
-		}//inputMessage가 있을때만 전송가능 끝.
-		
-	}
+//아래 코드는 지도 위의 마커를 제거하는 코드입니다
+//marker.setMap(null);    
 </script>
 </body>
 </html>

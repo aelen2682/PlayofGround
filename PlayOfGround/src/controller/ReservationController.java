@@ -38,10 +38,8 @@ public class ReservationController {
 			session.setAttribute("ReservationList", ReservationList);
 			System.out.println("UserList : "+ ReservationList);
 		}
-
 		return "reservationList";
 	}
-
 	@PostMapping("/insert")
 	@ResponseBody
 	public int ReservationInsert(Model m, Reservation reservation) {
